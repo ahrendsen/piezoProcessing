@@ -20,6 +20,6 @@ file = os.path.join(photosDir,
 image = skimage.io.imread(file)
 skimage.io.imshow(image)
 
-line = measure.profile_line(image,[50,0],[50,400], mode='constant', order=1)
+line = measure.profile_line(image,[len(image)/2,0],[len(image)/2,len(image[0])], mode='constant', order=1)
 fig, ax = plt.subplots()
-ax.scatter(range(len(line)),line[:,0])
+ax.scatter(range(len(line)),line[:,1])
