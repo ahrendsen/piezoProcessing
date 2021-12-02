@@ -30,3 +30,4 @@ def processFile(inputFile, spacing, inputDirectory, outputDirectory):
     ax.set_ylabel("Intensity")
     
     return [1,2]
+
