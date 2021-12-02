@@ -14,10 +14,11 @@ photosDir = os.path.join(homeDir, "Desktop", "gitSpace", "piezoprocessing",
                          "data")
 
 files = os.scandir(photosDir)
+os.chdir(photosDir)
 
 spacing = 400
 results = []
 for file in files:
-    res = processFile(file, spacing)
+    res = processFile(file, spacing, photosDir, "outDir")
     results.append(res)
 
