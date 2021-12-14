@@ -40,8 +40,8 @@ def process_file(image_location, fringe_width):
                                        linewidth = 120,mode='constant', order=5)
     line = line[:,0]
     fig, ax = plt.subplots()
-    ax.scatter(range(len(line)),line) 
-    #ax.scatter(range(len(line)),line[:,1]) 
+    ax.scatter(range(len(line)), line)
+    # ax.scatter(range(len(line)), line[:,1])
     print(max(line))
     
     width = fringe_width
@@ -64,6 +64,4 @@ def process_file(image_location, fringe_width):
     return([min_1,min_2])
     
 
-process_file(r"C:\TIm Gay Research\Lab Photos\Camera Data\11_2_photos\DSC_0072.JPG", 500)
-
-
+# process_file(r"C:\TIm Gay Research\Lab Photos\Camera Data\11_2_photos\DSC_0072.JPG", 500)
