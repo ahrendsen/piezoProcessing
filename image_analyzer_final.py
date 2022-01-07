@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 import os
 import datetime
 import numpy as np
+import bottleneck as bn 
 
 homeDir = os.path.expanduser("~")
 photosDir = os.path.join(homeDir, "gitSpace", "piezoprocessing",
@@ -37,6 +38,8 @@ def process_file(image_location, fringe_width, input_folder, output_folder):
                                 [len(image)/2, len(image[0])],
                                 linewidth = 120, mode='constant', order=5)
     line = line[:,0]
+    line = bn.move_mean(line, window=100, min_count=1)
+    print(line)
     fig, ax = plt.subplot_mosaic([['top', 'top'],
                                   ['bottom_left', 'bottom_right']])
     ax['top'].scatter(range(len(line)), line)
