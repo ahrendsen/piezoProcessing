@@ -16,14 +16,12 @@ import matplotlib.pyplot as plt
 import os
 import datetime
 import numpy as np
-"""
+
 homeDir = os.path.expanduser("~")
-photosDir = os.path.join(homeDir, "Desktop", "gitSpace", "piezoprocessing",
+photosDir = os.path.join(homeDir, "gitSpace", "piezoprocessing",
                          "data")
 
-file = os.path.join(photosDir,
-                    "C:\TIm Gay Research\Lab Photos\Camera Data\11_2_photos\DSC_0062.JPG")
-"""
+file = os.path.join(photosDir, "DSC_0068.JPG")
 
 
 def process_file(image_location, fringe_width, input_folder, output_folder):
@@ -39,9 +37,11 @@ def process_file(image_location, fringe_width, input_folder, output_folder):
                                 [len(image)/2, len(image[0])],
                                 linewidth = 120, mode='constant', order=5)
     line = line[:,0]
-    # fig, ax = plt.subplots()
-    # ax.scatter(range(len(line)), line)
-    # ax.scatter(range(len(line)), line[:,1])
+    fig, ax = plt.subplot_mosaic([['top', 'top'],
+                                  ['bottom_left', 'bottom_right']])
+    ax['top'].scatter(range(len(line)), line)
+    ax['bottom_left'].scatter(range(len(line)), line)
+    ax['bottom_right'].scatter(range(len(line)), line)
     print(max(line))
     
     width = fringe_width
@@ -53,15 +53,24 @@ def process_file(image_location, fringe_width, input_folder, output_folder):
     
     #print(max_location)
     
-    left = max_location-width
+    left = max_location - width
     right = max_location + width
     
-    min_1 = np.argmin(line[leftoat:max_location]) + left
+    min_1 = np.argmin(line[left: max_location]) + left
     print(min_1)
     
-    min_2 = np.argmin(line[max_location:right]) + max_location
+    min_2 = np.argmin(line[max_location: right]) + max_location
     print(min_2)
+    
+    ax['top'].axvline(min_1)
+    ax['top'].axvline(min_2)
+    
+    shift = 150
+    ax['bottom_left'].set_xlim([min_1 - shift, min_1 + shift])
+    ax['bottom_left'].axvline(min_1)
+    ax['bottom_right'].set_xlim([min_2 - shift, min_2 + shift])
+    ax['bottom_right'].axvline(min_2)
     return([min_1,min_2])
     
 
-# process_file(r"C:\TIm Gay Research\Lab Photos\Camera Data\11_2_photos\DSC_0072.JPG", 500)
+process_file(file, 500, photosDir, photosDir)
