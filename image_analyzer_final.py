@@ -38,13 +38,18 @@ def process_file(image_location, fringe_width, input_folder, output_folder):
                                 [len(image)/2, len(image[0])],
                                 linewidth = 120, mode='constant', order=5)
     line = line[:,0]
-    line = bn.move_mean(line, window=100, min_count=1)
+    line = bn.move_mean(line, window=1, min_count=1)
     print(line)
     fig, ax = plt.subplot_mosaic([['top', 'top'],
-                                  ['bottom_left', 'bottom_right']])
+                                  ['bottom_left', 'bottom_right']],
+                                 constrained_layout=True)
     ax['top'].scatter(range(len(line)), line)
+    ax['top'].set_title("Full Plot")
     ax['bottom_left'].scatter(range(len(line)), line)
+    ax['bottom_left'].set_title("First Minimum")
     ax['bottom_right'].scatter(range(len(line)), line)
+    ax['bottom_left'].set_title("First Minimum")
+    
     print(max(line))
     
     width = fringe_width
@@ -71,8 +76,11 @@ def process_file(image_location, fringe_width, input_folder, output_folder):
     shift = 150
     ax['bottom_left'].set_xlim([min_1 - shift, min_1 + shift])
     ax['bottom_left'].axvline(min_1)
+
     ax['bottom_right'].set_xlim([min_2 - shift, min_2 + shift])
     ax['bottom_right'].axvline(min_2)
+    ax['bottom_right'].set_title("Second Minimum")
+    
     return([min_1,min_2])
     
 
