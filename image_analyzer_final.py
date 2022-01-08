@@ -44,7 +44,7 @@ def process_file(image_location, fringe_width, input_folder, output_folder):
                                   ['bottom_left', 'bottom_right']],
                                  constrained_layout=True)
     ax['top'].scatter(range(len(line)), line)
-    ax['top'].set_title("Full Plot")
+    ax['top'].set_title("Full Plot: " + os.path.basename(file))
     ax['bottom_left'].scatter(range(len(line)), line)
     ax['bottom_left'].set_title("First Minimum")
     ax['bottom_right'].scatter(range(len(line)), line)
