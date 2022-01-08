@@ -19,14 +19,15 @@ import numpy as np
 import bottleneck as bn 
 
 homeDir = os.path.expanduser("~")
-photosDir = os.path.join(homeDir, "gitSpace", "piezoprocessing",
+photosDir = os.path.join(homeDir, "Desktop", "gitSpace", "piezoprocessing",
                          "data")
 
 file = os.path.join(photosDir, "DSC_0068.JPG")
 
 
-def process_file(image_location, fringe_width, input_folder, output_folder):
-    image = skimage.io.imread(os.path.join(input_folder, image_location))
+def process_file(filename, fringe_width, input_folder, output_folder,
+                 graph_output=False):
+    image = skimage.io.imread(os.path.join(input_folder, filename))
     # skimage.io.imshow(image)
     # line = measure.profile_line(image,[50,0],[50,400], mode='constant', order=)
     """linewidth = 160 because we want to capture 2/3 of the fringe pattern,
@@ -38,7 +39,7 @@ def process_file(image_location, fringe_width, input_folder, output_folder):
                                 [len(image)/2, len(image[0])],
                                 linewidth = 120, mode='constant', order=5)
     line = line[:,0]
-    line = bn.move_mean(line, window=1, min_count=1)
+    line = bn.move_mean(line, window=100, min_count=1)
     print(line)
     fig, ax = plt.subplot_mosaic([['top', 'top'],
                                   ['bottom_left', 'bottom_right']],
@@ -80,8 +81,13 @@ def process_file(image_location, fringe_width, input_folder, output_folder):
     ax['bottom_right'].set_xlim([min_2 - shift, min_2 + shift])
     ax['bottom_right'].axvline(min_2)
     ax['bottom_right'].set_title("Second Minimum")
-    
-    return([min_1,min_2])
-    
+
+
+    graph_name = str.replace(filename, ".JPG", "_graph.png")
+    if(graph_output):
+        fig.savefig(os.path.join(output_folder, graph_name))
+
+    return([min_1, min_2])
+
 
 process_file(file, 500, photosDir, photosDir)

@@ -23,12 +23,15 @@ photosDir = os.path.join(homeDir, "OneDrive - University of Nebraska-Lincoln",
                          "Project - Chiral Piezo", "data", "longDrift")
 # The location of the foler that you want to process.
 analysisDir = os.path.join(homeDir, "Desktop", "gitSpace", "piezoprocessing",
-                         "analysis")
+                           "analysis")
+
 
 # Grab an iterator that contains the files in the folder.
 files = os.scandir(photosDir)
 # Convert the iterator into a list
 files = list(files)
+files = files[:5]
+    
 
 # The voltages at which the data was collected. It is
 # assumed that the images will be collected in this order.
@@ -47,7 +50,8 @@ resultsv1 = []
 # This for loop takes every nth file from the
 # files list, where n is the number of voltages.
 for file in files[::len(voltages)]:
-    res = process_file(file, spacing, photosDir, analysisDir)
+    res = process_file(os.path.basename(file), spacing, photosDir,
+                       analysisDir, graph_output=True)
     resultsv1.append(res)
 # This converts it into a dataframe for easy joining later.
 df1 = pd.DataFrame(resultsv1, columns=['First Minimum Position V1',
@@ -58,18 +62,18 @@ df1 = pd.DataFrame(resultsv1, columns=['First Minimum Position V1',
 df1.insert(0, 'Voltage 1(V)', voltages[0])
 
 
-resultsv2 = []
-for file in files[1::len(voltages)]:
-    res = process_file(file, spacing, photosDir, photosDir)
-    resultsv2.append(res)
-df2 = pd.DataFrame(resultsv2, columns=['First Minimum Position V2',
-                                       'Second Minimum Postion V2'])
-df2.insert(0, 'Voltage 2(V)', voltages[1])
+# resultsv2 = []
+# for file in files[1::len(voltages)]:
+#     res = process_file(file, spacing, photosDir, photosDir)
+#     resultsv2.append(res)
+# df2 = pd.DataFrame(resultsv2, columns=['First Minimum Position V2',
+#                                        'Second Minimum Postion V2'])
+# df2.insert(0, 'Voltage 2(V)', voltages[1])
 
 # %%
 
 # Joins the two voltage blocks together.
-dfAll = df1.join(df2)
+# dfAll = df1.join(df2)
 
 # Exports the dataframe as an excel file.
-dfAll.to_excel(os.path.join(analysisDir, "longDrift.xlsx"))
+df1.to_excel(os.path.join(analysisDir, "longDrift.xlsx"))
