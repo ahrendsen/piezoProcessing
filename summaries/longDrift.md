@@ -11,6 +11,9 @@ The images were analyzed using the python image analysis program which Niko and 
 This takes a portion of the image roughly centered in the laser spot and averages the pixel values in each column.
 This is reffered to as the profile data. 
 The algorithm finds the maximum value in the profile, then  searches for a minimum value within 400 pixels to the left and the right of this maximum.
+An image representation of this process is shown below.
+
+![image](https://camo.githubusercontent.com/771435dadf3f09a54b4e986677729abc3ba9fac50bdfb51fb45eeb1f38a22adf/68747470733a2f2f692e696d6775722e636f6d2f313259305359762e706e67)
 
 # Results
 The results of the long-term drift study are shown in the image below.
@@ -24,13 +27,31 @@ The altered data for the first minimum are shown below.
 
 ![image](https://user-images.githubusercontent.com/6043860/148698089-cd2ed37d-39b6-471c-ac2b-34807f92b737.png)
 
+# Discussion
 We see that even after 3 hours, there is still substantial drift in the fringes. 
 At it's worst, the fringes shifted approximately 1000 pixels in 50 minutes. 
 The drift was not monotonic, changing directions at least twice during the data collection period.
 The shortest time period between different directions of the drift was approximately 10 minutes. 
 At the 3 hour mark, it appears that the fringe drift is approximately linear.
+
 It would be worthwhile to collect this data for a longer period of time with less frequent samples to see if after 3 hours the drifting would settle down, or at least continue at a constant rate.
+If some sort of a steady state cannot be obtained, perhaps we could investigate other lasers to see if they are less susceptible to this sort of drift. 
+If this doesn't help, a method of analyzing the data which factors in the fringe drift between images collected at the same voltage will need to be adopted.
+
 # Supplemental material
 ## Additional Method Details
+### Automated image collection from DSLR camera
 To collect data consistently for such an extended period of time, I connected my Nikon D3100 to a laptop running the program gphoto2. 
 I can then write a shell script to run the gphoto2 program to collect an image using the camera.
+
+### Thoughts on profile data 
+Shown below is an example of the profile collected from one of our images.
+
+![DSC_0012_graph](https://user-images.githubusercontent.com/6043860/148698515-b7ca27fe-9b65-442c-aa29-81740abd290a.png)
+
+We know that this profile should be a Gaussian convoluted with a Cos(theta)^2 function.
+The Gaussian envelope, however, is saturated because the laser spot is too bright. 
+It would be worth examining how the quality of the data changes if we modify the camera settings so that the red sensor's data is not maxed out. 
+This will certainly need to be done if we want to fit to the Gaussian convoluted with the Cos^2.
+A less intense image might just result in more noisy data though. 
+Further investigation is needed. 
