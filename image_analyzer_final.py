@@ -18,15 +18,12 @@ import datetime
 import numpy as np
 import bottleneck as bn 
 
-homeDir = os.path.expanduser("~")
-photosDir = os.path.join(homeDir, "Desktop", "gitSpace", "piezoprocessing",
-                         "data")
 
-file = os.path.join(photosDir, "DSC_0068.JPG")
 
 
 def process_file(filename, fringe_width, input_folder, output_folder,
                  graph_output=False):
+    print('Processing Image:' + filename)
     image = skimage.io.imread(os.path.join(input_folder, filename))
     # skimage.io.imshow(image)
     # line = measure.profile_line(image,[50,0],[50,400], mode='constant', order=)
@@ -40,18 +37,17 @@ def process_file(filename, fringe_width, input_folder, output_folder,
                                 linewidth = 120, mode='constant', order=5)
     line = line[:,0]
     line = bn.move_mean(line, window=100, min_count=1)
-    print(line)
     fig, ax = plt.subplot_mosaic([['top', 'top'],
                                   ['bottom_left', 'bottom_right']],
                                  constrained_layout=True)
     ax['top'].scatter(range(len(line)), line)
-    ax['top'].set_title("Full Plot: " + os.path.basename(file))
+    ax['top'].set_title("Full Plot: " + os.path.basename(filename))
     ax['bottom_left'].scatter(range(len(line)), line)
     ax['bottom_left'].set_title("First Minimum")
     ax['bottom_right'].scatter(range(len(line)), line)
     ax['bottom_left'].set_title("First Minimum")
     
-    print(max(line))
+    # print(max(line))
     
     width = fringe_width
     
@@ -87,7 +83,11 @@ def process_file(filename, fringe_width, input_folder, output_folder,
     if(graph_output):
         fig.savefig(os.path.join(output_folder, graph_name))
 
-    return([min_1, min_2])
+    return([filename, min_1, min_2])
 
+# homeDir = os.path.expanduser("~")
+# photosDir = os.path.join(homeDir, "Desktop", "gitSpace", "piezoprocessing",
+#                          "data")
 
-process_file(file, 500, photosDir, photosDir)
+# file = os.path.join(photosDir, "DSC_0068.JPG")
+# process_file(file, 500, photosDir, photosDir)

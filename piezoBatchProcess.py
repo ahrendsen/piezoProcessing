@@ -21,7 +21,7 @@ homeDir = os.path.expanduser("~")
 photosDir = os.path.join(homeDir, "OneDrive - University of Nebraska-Lincoln",
                          "BoxMigrationUNL", "Gay Group",
                          "Project - Chiral Piezo", "data", "longDrift")
-# The location of the foler that you want to process.
+# The location of the folder that you want to process.
 analysisDir = os.path.join(homeDir, "Desktop", "gitSpace", "piezoprocessing",
                            "analysis")
 
@@ -30,50 +30,52 @@ analysisDir = os.path.join(homeDir, "Desktop", "gitSpace", "piezoprocessing",
 files = os.scandir(photosDir)
 # Convert the iterator into a list
 files = list(files)
-files = files[:5]
+files = files[:3]
     
 
 # The voltages at which the data was collected. It is
-# assumed that the images will be collected in this order.
-# So the first files will be collected at 0 volts, then
-# the second at 10.05, then the third at 0 volts again.
+# assumed that the images will be collected in this order
+# in a repeating fashion. For example, if data was collected
+# at voltages = [0, 10], the first file in the directory 
+# should be at 0 volts, the second at 10, the third at 0,
+# and so on to the end of the directory.
 voltages = [0]
 # The approximate spacing of the fringes, used to set a
 # bounds of where the program will search for a minimum.
 spacing = 400
 
 
+allResults = []
 # %%
-# This cell should be converted into a for each loop
-# over the voltages list... but I'm lazy.
-resultsv1 = []
-# This for loop takes every nth file from the
-# files list, where n is the number of voltages.
-for file in files[::len(voltages)]:
-    res = process_file(os.path.basename(file), spacing, photosDir,
-                       analysisDir, graph_output=True)
-    resultsv1.append(res)
-# This converts it into a dataframe for easy joining later.
-df1 = pd.DataFrame(resultsv1, columns=['First Minimum Position V1',
-                                       'Second Minimum Position V1'])
-# This adds in a new column where each value is the same
-# for each row of the column, and they are all equal to
-# voltages[0]
-df1.insert(0, 'Voltage 1(V)', voltages[0])
+for i in range(len(voltages)):
+    results = []
+    
+    # Make individual folders for the graph image files in the analysis folder.
+    analysisDirV = os.path.join(analysisDir, str(voltages[i]))
+    if os.path.isdir(analysisDirV) is False:
+        os.makedirs(analysisDirV)
+          
+    # This for loop takes every nth file from the
+    # files list, where n is the number of voltages.
+    for file in files[i::len(voltages)]:
+        res = process_file(os.path.basename(file), spacing, photosDir,
+                           analysisDirV, graph_output=True)
+        results.append(res)
+        
+    # This converts it into a dataframe for easy joining later.
+    df = pd.DataFrame(results, columns=['Filename', 
+                                        'First Minimum Position V= ' + 
+                                         str(voltages[i]),
+                                         'Second Minimum Position V= ' +
+                                         str(voltages[i])])
+    # This adds in a new column where each value is the same
+    # for each row of the column, and they are all equal to
+    # voltages[i]
+    df.insert(1, 'Voltage = ' + str(voltages[i]) + ' (V)', voltages[i])
+    allResults.append(df)
 
-
-# resultsv2 = []
-# for file in files[1::len(voltages)]:
-#     res = process_file(file, spacing, photosDir, photosDir)
-#     resultsv2.append(res)
-# df2 = pd.DataFrame(resultsv2, columns=['First Minimum Position V2',
-#                                        'Second Minimum Postion V2'])
-# df2.insert(0, 'Voltage 2(V)', voltages[1])
-
-# %%
-
-# Joins the two voltage blocks together.
-# dfAll = df1.join(df2)
+# Joins the voltage blocks together.
+dfAll = pd.concat(allResults, axis='columns')
 
 # Exports the dataframe as an excel file.
-df1.to_excel(os.path.join(analysisDir, "longDrift.xlsx"))
+dfAll.to_excel(os.path.join(analysisDir, "longDrift.xlsx"), index=False)
