@@ -20,17 +20,19 @@ homeDir = os.path.expanduser("~")
 # The location of the foler that you want to process.
 photosDir = os.path.join(homeDir, "OneDrive - University of Nebraska-Lincoln",
                          "BoxMigrationUNL", "Gay Group",
-                         "Project - Chiral Piezo", "data", "longDrift")
+                         "Project - Chiral Piezo", "data",
+                         "longDrift_2021-11-24")
 # The location of the folder that you want to process.
-analysisDir = os.path.join(homeDir, "Desktop", "gitSpace", "piezoprocessing",
-                           "analysis")
+analysisDir = os.path.join(homeDir, "OneDrive - University of Nebraska-Lincoln",
+                         "BoxMigrationUNL", "Gay Group",
+                         "Project - Chiral Piezo", "analysis", 
+                         "longDrift_2021-11-24", "analysis")
 
 
 # Grab an iterator that contains the files in the folder.
 files = os.scandir(photosDir)
 # Convert the iterator into a list
 files = list(files)
-files = files[:3]
     
 
 # The voltages at which the data was collected. It is
@@ -78,4 +80,4 @@ for i in range(len(voltages)):
 dfAll = pd.concat(allResults, axis='columns')
 
 # Exports the dataframe as an excel file.
-dfAll.to_excel(os.path.join(analysisDir, "longDrift.xlsx"), index=False)
+dfAll.to_excel(os.path.join(analysisDir, "analysisSummary.xlsx"), index=False)
