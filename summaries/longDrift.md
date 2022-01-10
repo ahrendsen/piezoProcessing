@@ -55,3 +55,25 @@ It would be worth examining how the quality of the data changes if we modify the
 This will certainly need to be done if we want to fit to the Gaussian convoluted with the Cos^2.
 A less intense image might just result in more noisy data though. 
 Further investigation is needed. 
+
+### Smoothing Algorithms
+One additional investigation that I did was into whether it is sensible to use a "smoothing algorithm" or a moving average to make our data less noisy.
+I view this as giving the same benefit that you get from fitting the data to some function, without the complexity overhead of finding a good fit funciton and implementing the algorithm.
+There are, however, some obvious drawbacks that come with the ease of implementing this.
+In any case, the image below shows how implementing the moving average alters the appearance of the data.
+
+![image](https://user-images.githubusercontent.com/6043860/148824931-d89bc0d8-4865-4dfe-a5b1-71e4c5c64fee.png)
+
+I'm actually surprised how little using the moving average smoothed out the data. 
+There are still frequent jumps that can be seen throughout the data collection process. 
+The obvious benefits of this method are seen near index 300, where noise in the data created a local minimum which suddenly jumped to another location. 
+The minimum of the fringe would actually be in between these two points, which the moving average algorithm handles fairly nicely.
+The profiles where this jump happens are shown in the two images below.
+
+![image](https://user-images.githubusercontent.com/6043860/148825462-f762ed86-aa40-4dcc-b553-c0823dffbe62.png)
+
+![image](https://user-images.githubusercontent.com/6043860/148825485-4b4a4fc7-3852-4e04-8d31-c96c802f4a0f.png)
+
+
+
+
