@@ -74,6 +74,19 @@ The profiles where this jump happens are shown in the two images below.
 
 ![image](https://user-images.githubusercontent.com/6043860/148825485-4b4a4fc7-3852-4e04-8d31-c96c802f4a0f.png)
 
+Finally, I also want to show a comparison of how the moving average smooths the data.
+I'll show the same two sets of profiles that are above, but with the moving average applied.
+
+![DSC_0340_graph](https://user-images.githubusercontent.com/6043860/149027977-3c62a44f-05e3-40c0-82fd-a3564c2682ff.png)
+
+![DSC_0342_graph](https://user-images.githubusercontent.com/6043860/149027978-36bdf7f7-57e3-43e9-9bee-787cb72d885c.png)
+
+While the smoothing algorithm is a nice intermediate step, I think the end goal should still be fitting a function to the data.
+In order for this to work, we can't have the profile be saturated, see above comments on profile data.
+I would recommend doing a study where images are collected with different camera settings to see if it is feasible to still have usable data when the profile isn't saturated.
+We might want to turn the lights off in the room to see if that improves the quality of the data.
+
+
 
 
 
