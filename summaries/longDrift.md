@@ -3,13 +3,13 @@ I investigated the drift of the fringes over time in the chiral piezo project.
 My goal was to determine the length of time that a researcher needs to wait before collecting data so that the laser has "settled down."
 
 # Methods
-I turned the laser on, and after a short time began recorded an
+I turned the laser on, and after a short time began recording an
 image every 20 seconds. I let this go until the camera ran out
 of battery.
 
 The images were analyzed using the python image analysis program which Niko and I have been collaborating on.
 This takes a portion of the image roughly centered in the laser spot and averages the pixel values in each column.
-This is reffered to as the profile data. 
+This is referred to as the profile data. 
 The algorithm finds the maximum value in the profile, then  searches for a minimum value within 400 pixels to the left and the right of this maximum.
 An image representation of this process is shown below.
 
@@ -35,6 +35,7 @@ The shortest time period between different directions of the drift was approxima
 At the 3 hour mark, it appears that the fringe drift is approximately linear.
 
 It would be worthwhile to collect this data for a longer period of time with less frequent samples to see if after 3 hours the drifting would settle down, or at least continue at a constant rate.
+A second set of data would also be informative to see if the same pattern recurs and is a result of the laser stabilizing, or is random and will be different every time.
 If some sort of a steady state cannot be obtained, perhaps we could investigate other lasers to see if they are less susceptible to this sort of drift. 
 If this doesn't help, a method of analyzing the data which factors in the fringe drift between images collected at the same voltage will need to be adopted.
 
@@ -42,7 +43,8 @@ If this doesn't help, a method of analyzing the data which factors in the fringe
 ## Additional Method Details
 ### Automated image collection from DSLR camera
 To collect data consistently for such an extended period of time, I connected my Nikon D3100 to a laptop running the program gphoto2. 
-I can then write a shell script to run the gphoto2 program to collect an image using the camera.
+I can then write a shell script to run the gphoto2 program to collect an image using the camera. 
+I set this up to record an image and wait for a short period of time (10 s?) before collecting the next image.
 
 ### Thoughts on profile data 
 Shown below is an example of the profile collected from one of our images.
