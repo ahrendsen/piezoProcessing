@@ -13,6 +13,7 @@ import skimage
 from skimage import io
 from skimage import measure
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import os
 import datetime
 import numpy as np
@@ -32,11 +33,19 @@ def process_file(image_location, fringe_width, input_folder, output_folder):
     """linewidth = 160 because we want to capture 2/3 of the fringe pattern,
     the edges are more susceptible to noise.
     """
-    
+    yCoord = len(image)/2 
+    profile_linewidth = 120 # This is the total width i.e. distance up plus 
+                             # distance down. The larger this is, the more
+                             # time it takes to process each image. Using
+                             # nearly the entire image (3000), takes something
+                             # like 26 seconds to process a single image,
+                             # but it results in much smoother data. This is
+                             # comapred to 5 seconds for a linewidth of 120.
     line = measure.profile_line(image,
-                                [len(image)/2, 0],
-                                [len(image)/2, len(image[0])],
-                                linewidth = 120, mode='constant', order=5)
+                                [yCoord, 0],
+                                [yCoord, len(image[0])],
+                                linewidth = profile_linewidth,
+                                mode='constant', order=5)
     line = line[:,0]
     line = bn.move_mean(line, window=1, min_count=1)
     print(line)
@@ -50,6 +59,14 @@ def process_file(image_location, fringe_width, input_folder, output_folder):
     ax['bottom_right'].scatter(range(len(line)), line)
     ax['bottom_left'].set_title("First Minimum")
     
+    # Make an inset of the actual image
+    axins = inset_axes(ax['top'], width=1.35, height=.9, loc='upper left')
+    axins.tick_params(labelleft=False, labelbottom=False)
+    axins.imshow(image)
+    axins.axhspan(yCoord - profile_linewidth/2,
+                  yCoord + profile_linewidth/2,
+                  color='yellow',
+                  alpha=.5)
     print(max(line))
     
     width = fringe_width
